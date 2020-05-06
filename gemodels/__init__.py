@@ -10,9 +10,8 @@ except DistributionNotFound:
 finally:
     del get_distribution, DistributionNotFound
 
-from matplotlib import pyplot as plt
 import numpy as np
-from scipy.stats import f as statf
+from scipy.stats import t as statt, f as statf, chi2 as statx2, nbinom as statnb
 
 
 # defining stat function to avoid dependency on any other package
@@ -44,6 +43,7 @@ def check_data(data):
         raise ModelError('Cannot Parse Data : \n', data)
     return y, t
 
+
 def check_data_1d(x):
     if isinstance(x, list):
         x = np.array(x)
@@ -53,11 +53,53 @@ def check_data_1d(x):
     return x
 
 
+def confidence_band_t(func, params, y_act, t, t_breaks=None, alpha=0.05, breaks=100):
+    """
+    Making a prediction band based on t statistic
+
+    :param y_act: Actual Values
+    :param t: Steps of the data
+    :param func: parameterize function
+    :param params: trained parameters
+    :param alpha: confidence interval/ significance level
+    :param t_breaks: Smoothed Steps for finer lines
+    :param breaks: Breaks of prediction to increase smoothness of curve
+    :return: lower predicted band and upper predicted band
+
+    """
+    N = y_act.size  # data sample size
+    var_n = len(params)  # number of parameters
+    y_fit = func(t, params)
+    if t_breaks is None:
+        t_breaks = np.arange(np.min(t), np.max(t), breaks)
+    t_mean = np.mean(t)
+    dof = max(0, N - var_n)
+
+    # Quantile of Student's t distribution for p=(1-alpha/2)
+    q = statt.ppf(1.0 - alpha / 2.0, dof)
+
+    # Stdev of an individual measurement
+    se = np.sqrt(1. / (N - var_n) * np.sum((y_act - y_fit) ** 2))
+
+    # Auxiliary definitions
+    sx = (t_breaks - t_mean) ** 2
+    sxd = np.sum((t - t_mean) ** 2)
+
+    # Predicted values (best-fit model)
+    yp = func(t_breaks, params)
+
+    # Prediction band
+    dy = q * se * np.sqrt(1.0 + (1.0 / N) + (sx / sxd))
+    # Upper & lower prediction bands.
+    lpb, upb = yp - dy, yp + dy
+
+    return lpb, upb
+
+
 class ModelStats(object):
 
-    def __init__(self, name=None,p_alpha=None,
+    def __init__(self, name=None, p_alpha=None,
                  tolerance=1e-4, keep_stat=True, digits=2):
-
         # Class variables
         # self.confidence_measure = confidence_measure
         self.identifier = name
@@ -164,7 +206,7 @@ class BaseModelInterface:
         self.model_name = None
         self.model_type = None
         self.error_type = None
-        self.state = {}
+        self.state = None
         self.parameters = None
         self.ge_func = None
         self.confidence = None
