@@ -5,13 +5,9 @@ Interface to Growth Model Training Routine
 from gemodels import BaseModelInterface, ModelStats, ModelError, StatError
 from gemodels import check_data, check_data_1d
 from .models import all_func
-from collections import namedtuple
 import numpy as np
 from scipy.optimize import curve_fit, minimize, least_squares
 from scipy.stats import t as statt, f as statf, chi2 as statx2, nbinom as statnb
-
-
-
 
 
 class GrowthModel(BaseModelInterface):
@@ -22,7 +18,20 @@ class GrowthModel(BaseModelInterface):
     def __init__(self, model='logistic', method='curve', method_params=dict(),
                  alter_strategy=None, valid_steps=0, confidence_criteria='one-student',
                  confidence_alpha=0.5, inverse=False):
-        """"""
+        """
+        Growth Models
+
+
+        :param model:'logistic','richard','bass','chapmanrichard','gompretz','weibull
+        :param method: 'curve','lsq','minloss', # stochastic in progress
+        :param method_params: extra params while training
+        :param alter_strategy: Manipulate data before fitting 'ma', 'dtrend' in progress
+        :param valid_steps: data points to do validity on actual data.
+        :param confidence_criteria:  'covariance'
+        :param confidence_alpha:  float value to define confidence interval
+        :param inverse: a flag for true and false.
+        """
+
         super().__init__()
         self.model_name = "Growth"
         self.model_type = model.title()
@@ -99,7 +108,12 @@ class GrowthModel(BaseModelInterface):
         self.stats.summary(return_df=False)
 
     def predict(self, steps):
-        steps = check_data_1d(steps)
+        if isinstance(steps,int):
+            # This is crude as of now need better methods
+            t_steps = self.stats.ndf + self.stats.mdf + 1
+            steps = np.arange(t_steps+1,t_steps+steps+1,dtype=np.int8)
+        else:
+            steps = check_data_1d(steps)
         return self._pfunc(self.parameters, steps)
 
     def plot_fit(self, X=None, confidence=True):

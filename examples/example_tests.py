@@ -21,8 +21,6 @@ if __name__ == '__main__':
     mod_growth = GrowthModel()
     mod_growth.fit(X)
     mod_growth.summary()
-
-    max_x = int(data['x'].max().tolist())
-    steps = [i+max_x for i in range(1,11)]
+    steps = 10
     print('Making Prediction for steps: ',steps)
     print('Predictions: ',mod_growth.predict(steps))
