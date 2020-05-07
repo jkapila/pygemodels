@@ -49,7 +49,6 @@ install:
 
 
 test_script:
-  - "cd C:\\projects\\uncertainties"
-  - activate uncty-env # Activate the virtual environment
+  - "cd C:\\projects\\pygemodels"
+  - activate test-ge # Activate the virtual environment
   - python setup.py egg_info
-  - python setup.py nosetests -sv
