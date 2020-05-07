@@ -1,0 +1,33 @@
+# Config file for automatic testing at travis-ci.org
+language: python
+language: python
+# Workaround for being able to use Python 3.7 (2019-03)
+sudo: required
+dist: xenial
+
+#matrix:
+#    include:
+#    - python: "3.5"
+#      env: DEPS="numpy scipy matplotlib"
+#    - python: "3.6"
+#      env: DEPS="numpy scipy matplotlib"
+#    - python: "3.7"
+#      env: DEPS="numpy scipy matplotlib"
+#   - python: "3.7"
+#      env: DEPS="numpy scipy matplotlib"
+
+before_install:
+    - pip install setuptools --upgrade
+    - pip install pip --upgrade
+#    - pip install $DEPS
+    - pip install codecov
+
+script:
+    - python setup.py egg_info
+#    - python setup.py nosetests -sv --with-coverage
+    # Generate documentation
+    #- cd doc
+    #- make html
+
+after_success:
+    - codecov
