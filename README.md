@@ -1,11 +1,9 @@
 # pygemodels
-=========
+-------
 
+[![Build Status](https://travis-ci.com/jkapila/pygemodels.svg?branch=master)](https://travis-ci.com/jkapila/pygemodels)
+[![Build status](https://ci.appveyor.com/api/projects/status/87045m7d03cp3r5x/branch/master?svg=true)](https://ci.appveyor.com/project/jkapila/pygemodels/branch/master)
 
-<!--.. image:: https://travis-ci.org/lebigot/uncertainties.svg?branch=master-->
-<!--   :target: https://travis-ci.org/lebigot/uncertainties-->
-<!--.. image:: https://ci.appveyor.com/api/projects/status/j5238244myqx0a0r?svg=true-->
-<!--   :target: https://ci.appveyor.com/project/lebigot/uncertainties-->
 <!--.. image:: https://codecov.io/gh/lebigot/uncertainties/branch/master/graph/badge.svg-->
 <!--   :target: https://codecov.io/gh/lebigot/uncertainties/-->
 <!--   -->
@@ -13,8 +11,6 @@
 <!--   :target: http://uncertainties-python-package.readthedocs.io/en/latest/?badge=latest-->
 <!--.. image:: https://img.shields.io/pypi/v/uncertainties.svg-->
 <!--   :target: https://pypi.org/project/uncertainties/-->
-
-
 ###  Python library for Growth and Epidemiology Model Fitting Routines
 
 ***The Need : The main goal here is to estimate the models based on data
@@ -22,7 +18,7 @@ availability and inferences on statistical tests.***
 
 
 ###  Implementations
-========
+-----------
 
 ####  Implementation for growth model includes:
 1. Logistic Growth Model
@@ -47,7 +43,7 @@ In Pipeline
 ***These Models can be trained individually or via Interfaces***
 
 ### Examples
-===========
+-----------
 
 Growth Models can be trained as:
 
@@ -77,7 +73,7 @@ mod_epi.plot()
 Please use with discretion and caution.**
 
 ### Disclaimer:
-===========
+-----------
 
 Lot of code for this project has been inspired by following projects:
 1. [R EpiModel](https://github.com/statnet/EpiModel)
